@@ -1,0 +1,31 @@
+{
+    "name": "avcodewizard/laravel-backup",
+    "description": "A Laravel package for database and storage backup with auto-cleanup.",
+    "keywords": ["laravel", "backup", "database backup", "storage backup","auto-backup", "auto-cleanup"],
+    "type": "library",
+    "license": "MIT",
+    "version": "1.0.0",
+    "autoload": {
+        "psr-4": {
+            "Avcodewizard\\LaravelBackup\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ankit Verma",
+            "email": "ankitc4087@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "illuminate/support": ">=10.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Avcodewizard\\LaravelBackup\\BackupServiceProvider"
+            ]
+        }
+    },
+    "minimum-stability": "dev"
+}
